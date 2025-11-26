@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Catatan Mahasiswa</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+     <h2 class="logo"><img src="image/polteki.png" align="left" width="100" height="100"></h2>
+      <nav class="navigation">
+        <a href="index.html">Home</a>
+        <a href="biodata.html">Biodata</a>
+        <a href="informasi.html">Informasi</a>
+        <a class="btnLogin-popup" href="login.html">Login</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="table-responsive">
+        <h2>Catatan Mahasiswa</h2>
+        <div class="notes">
+          <div class="controls">
+            <label for="filter-notes-semester" class="filter-label">Filter:</label>
+            <select id="filter-notes-semester" class="filter-select">
+              <option value="all">Semua Semester</option>
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+              <option value="3">Semester 3</option>
+              <option value="4">Semester 4</option>
+              <option value="5">Semester 5</option>
+              <option value="6">Semester 6</option>
+              <option value="7">Semester 7</option>
+              <option value="8">Semester 8</option>
+              <option value="5">Semester 9</option>
+              <option value="6">Semester 10</option>
+              <option value="7">Semester 11</option>
+              <option value="8">Semester 12</option>
+            </select>
+            <label for="filter-notes-type" class="filter-label" style="margin-left:8px;">Jenis:</label>
+            <select id="filter-notes-type" class="filter-select">
+              <option value="all">Semua Jenis</option>
+              <option value="Pribadi">Pribadi</option>
+              <option value="Perkuliahan">Perkuliahan</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <form id="note-form">
+            <textarea id="note-input" placeholder="Tulis catatan... (tekan Enter untuk baris baru)" aria-label="Tulis catatan"></textarea>
+            <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
+              <select id="note-semester">
+              <option value="">Tanpa Semester</option>
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+              <option value="3">Semester 3</option>
+              <option value="4">Semester 4</option>
+              <option value="5">Semester 5</option>
+              <option value="6">Semester 6</option>
+              <option value="7">Semester 7</option>
+              <option value="8">Semester 8</option>
+              <option value="5">Semester 9</option>
+              <option value="6">Semester 10</option>
+              <option value="7">Semester 11</option>
+              <option value="8">Semester 12</option>
+            </select>
+              <label for="note-type" style="margin-left:6px;">Jenis:</label>
+              <select id="note-type">
+                <option value="Pribadi">Pribadi</option>
+                <option value="Perkuliahan">Perkuliahan</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+            <button type="submit" class="btn">Tambah</button>
+          </form>
+
+          <ul id="notes-list" class="notes-list"></ul>
+        </div>
+  </section>
+  <a href="informasi.html" class="btn outline back-btn" onclick="event.preventDefault(); if(history.length>1){ history.back(); } else { location.href='informasi.html'; }">← Kembali</a>
+    </main>
+
+    <script>
+      (function (){
+  const form = document.getElementById('note-form');
+  const input = document.getElementById('note-input');
+  const semInput = document.getElementById('note-semester');
+  const typeInput = document.getElementById('note-type');
+  const filterEl = document.getElementById('filter-notes-semester');
+  const filterTypeEl = document.getElementById('filter-notes-type');
+        const list = document.getElementById('notes-list');
+
+        const STORAGE_NOTES = 'notes';
+
+        // load notes (backwards-compatible: strings -> objects)
+        function loadNotesRaw(){
+          const raw = JSON.parse(localStorage.getItem(STORAGE_NOTES) || '[]');
+          // normalize to objects {text, semester, type}
+          return raw.map(item => {
+            if(typeof item === 'string') return { text: item, semester: '', type: 'Pribadi' };
+            return { text: item.text || '', semester: item.semester || '', type: item.type || 'Pribadi' };
+          });
+        }
+
+        let notes = loadNotesRaw();
+
+        function persist(){ localStorage.setItem(STORAGE_NOTES, JSON.stringify(notes)); }
+
+        function render(){
+          list.innerHTML = '';
+          const filter = filterEl ? filterEl.value : 'all';
+          const filterType = filterTypeEl ? filterTypeEl.value : 'all';
+          notes.forEach((n, i) => {
+            if(filter !== 'all' && String(n.semester) !== filter) return;
+            if(filterType !== 'all' && String(n.type) !== filterType) return;
+            const li = document.createElement('li');
+            li.className = 'note-item';
+
+            // index number (1 = newest)
+            const idx = i + 1;
+            const left = document.createElement('div'); left.className = 'note-left';
+            const badge = document.createElement('span'); badge.className = 'note-badge'; badge.textContent = idx;
+            const textNode = document.createElement('div'); textNode.className = 'note-text'; textNode.textContent = n.text;
+            left.appendChild(badge); left.appendChild(textNode);
+
+            const right = document.createElement('div'); right.className = 'note-right';
+            const typeEl = document.createElement('small');
+            const typeClass = (n.type || '').toString().toLowerCase().replace(/\s+/g,'-') || 'pribadi';
+            typeEl.className = 'note-type ' + typeClass; typeEl.textContent = n.type || '';
+            const sem = document.createElement('small'); sem.className = 'note-sem'; sem.textContent = n.semester ? ('Semester ' + n.semester) : 'Tanpa Semester';
+            const btn = document.createElement('button'); btn.textContent = 'Hapus'; btn.className = 'btn small';
+            btn.addEventListener('click', ()=>{ removeNote(i); });
+            right.appendChild(typeEl); right.appendChild(sem); right.appendChild(btn);
+            li.appendChild(left); li.appendChild(right);
+            list.appendChild(li);
+          });
+        }
+
+        function addNote(text, semester, type){
+          notes.unshift({ text, semester: semester || '', type: type || 'Pribadi' });
+          persist(); render();
+          // highlight newly added note briefly by adding a class
+          const first = list.querySelector('li');
+          if(first){
+            first.classList.add('note-new');
+            setTimeout(()=>{ first.classList.remove('note-new'); }, 700);
+          }
+        }
+
+        function removeNote(index){
+          notes.splice(index,1); persist(); render();
+        }
+
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          const v = input.value.trim();
+          const s = semInput ? semInput.value : '';
+          const t = typeInput ? typeInput.value : 'Pribadi';
+          if(!v) return;
+          addNote(v, s, t);
+          input.value = ''; if(semInput) semInput.value = '';
+          if(typeInput) typeInput.value = 'Pribadi';
+        });
+
+        if(filterEl){
+          filterEl.addEventListener('change', render);
+        }
+        if(filterTypeEl){
+          filterTypeEl.addEventListener('change', render);
+        }
+
+        render();
+      })();
+    </script>
+  </body>
+</html>

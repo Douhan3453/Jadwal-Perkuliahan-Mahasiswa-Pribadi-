@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kalender</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <h2 class="logo"><img src="image/polteki.png" align="left" width="100" height="100"></h2>
+      <nav class="navigation">
+        <a href="index.html">Home</a>
+        <a href="biodata.html">Biodata</a>
+        <a href="informasi.html">Informasi</a>
+        <a class="btnLogin-popup" href="login.html">Login</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="table-responsive">
+        <h2>Kalender</h2>
+
+        <!-- Jadwal Perkuliahan Pribadi: pengguna bisa sesuaikan baris berikut -->
+        <h3>Jadwal Perkuliahan (Pribadi)</h3>
+        <table class="schedule-table" id="schedule-table" aria-label="Jadwal Perkuliahan">
+          <caption>Jadwal perkuliahan mahasiswa (sesuaikan sesuai data pribadi)</caption>
+          <thead>
+            <tr>
+              <th>Hari</th>
+              <th>Waktu</th>
+              <th>Mata Kuliah</th>
+              <th>Ruang</th>
+              <th>Dosen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Hari">Senin</td>
+              <td data-label="Waktu">08:00 - 10:00</td>
+              <td data-label="Mata Kuliah">Matematika Diskrit</td>
+              <td data-label="Ruang">A101</td>
+              <td data-label="Dosen">Dr. Andi</td>
+            </tr>
+            <tr>
+              <td data-label="Hari">Rabu</td>
+              <td data-label="Waktu">13:00 - 15:00</td>
+              <td data-label="Mata Kuliah">Pemrograman Web</td>
+              <td data-label="Ruang">Lab 2</td>
+              <td data-label="Dosen">Budi Santoso</td>
+            </tr>
+            <tr>
+              <td data-label="Hari">Jumat</td>
+              <td data-label="Waktu">10:00 - 12:00</td>
+              <td data-label="Mata Kuliah">Sistem Operasi</td>
+              <td data-label="Ruang">B201</td>
+              <td data-label="Dosen">Siti Nur</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="calendar">
+          <div class="calendar-header">
+            <button id="prev-month" class="btn">‹</button>
+            <label for="month-select" style="display:none">Pilih Bulan</label>
+            <select id="month-select" aria-label="Pilih Bulan" style="min-width:120px;">
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+            <h3 id="month-year">Month Year</h3>
+            <button id="next-month" class="btn">›</button>
+          </div>
+          <div id="calendar-grid" class="calendar-grid"></div>
+        </div>
+  </section> <a href="informasi.html" class="btn outline back-btn" onclick="event.preventDefault(); if(history.length>1){ history.back(); } else { location.href='informasi.html'; }">← Kembali</a>
+ 
+    </main>
+
+    <script>
+      (function(){
+        const grid = document.getElementById('calendar-grid');
+        const monthYear = document.getElementById('month-year');
+        const prev = document.getElementById('prev-month');
+        const next = document.getElementById('next-month');
+        let cur = new Date();
+        const monthSelect = document.getElementById('month-select');
+
+        function render(d){
+          grid.innerHTML = '';
+          const year = d.getFullYear();
+          const month = d.getMonth();
+          monthYear.textContent = d.toLocaleString(undefined,{month:'long', year:'numeric'});
+          // sync select (months are 0-based in Date, but select options are 1-based)
+          if(monthSelect) monthSelect.value = String(month+1);
+
+          const first = new Date(year,month,1);
+          const last = new Date(year, month+1, 0).getDate();
+          const startDay = first.getDay();
+
+          // weekday headers
+          ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(w => {
+            const hd = document.createElement('div'); hd.className='cal-cell head'; hd.textContent = w; grid.appendChild(hd);
+          });
+
+          for(let i=0;i<startDay;i++){ const empty = document.createElement('div'); empty.className='cal-cell empty'; grid.appendChild(empty); }
+
+          for(let day=1; day<=last; day++){
+            const cell = document.createElement('div');
+            cell.className='cal-cell day';
+            cell.textContent = day;
+            grid.appendChild(cell);
+          }
+        }
+
+        prev.addEventListener('click', ()=>{ cur = new Date(cur.getFullYear(), cur.getMonth()-1,1); render(cur); });
+        next.addEventListener('click', ()=>{ cur = new Date(cur.getFullYear(), cur.getMonth()+1,1); render(cur); });
+
+        if(monthSelect){
+          // set initial select to current month
+          monthSelect.value = String(cur.getMonth()+1);
+          monthSelect.addEventListener('change', (e)=>{
+            const m = parseInt(e.target.value,10);
+            if(!isNaN(m)){
+              // keep same year when switching month
+              cur = new Date(cur.getFullYear(), m-1, 1);
+              render(cur);
+            }
+          });
+        }
+
+        render(cur);
+      })();
+    </script>
+  </body>
+</html>
+<script src="transition.js"></script>
