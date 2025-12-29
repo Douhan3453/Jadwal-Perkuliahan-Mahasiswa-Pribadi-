@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jadwal</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    
+    <header>
+      <div class="logo">
+        <img src="image/polteki.png" alt="Polteki Logo" width="60" height="60">
+      </div>
+      <nav class="navigation">
+        <a href="index.php">Home</a>
+        <a href="biodata.php">Biodata</a>
+        <a href="informasi.php">Informasi</a>
+        <a class="btnLogin-popup" href="login.html">Logout</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h2>Jadwal</h2>
+  <section class="table-responsive" id="schedule-area">
+        <div class="controls">
+          <form id="schedule-form" class="schedule-form">
+          <select id="hari" required>
+            <option value="Senin">Senin</option>
+            <option value="Selasa">Selasa</option>
+            <option value="Rabu">Rabu</option>
+            <option value="Kamis">Kamis</option>
+            <option value="Jumat">Jumat</option>
+            <option value="Jumat">Sabtu</option>
+          </select>
+          <!-- Tambahan: tanggal spesifik dan bulan -->
+          <label style="display:flex; flex-direction:column">
+            Tanggal (opsional):
+            <input type="date" id="tanggal" />
+          </label>
+          <label for="jam" style="display:none">Pilih Jam</label>
+          <select id="jam" required>
+            <!-- times from 08:00 to 23:00 hourly -->
+            <option value="08:00">08:00</option>
+            <option value="09:00">09:00</option>
+            <option value="10:00">10:00</option>
+            <option value="11:00">11:00</option>
+            <option value="12:00">12:00</option>
+            <option value="13:00">13:00</option>
+            <option value="14:00">14:00</option>
+            <option value="15:00">15:00</option>
+            <option value="16:00">16:00</option>
+            <option value="17:00">17:00</option>
+            <option value="18:00">18:00</option>
+            <option value="19:00">19:00</option>
+            <option value="20:00">20:00</option>
+            <option value="21:00">21:00</option>
+            <option value="22:00">22:00</option>
+            <option value="23:00">23:00</option>
+          </select>
+          <input id="matkul" placeholder="Mata Kuliah" required />
+          <select id="semester" required>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4">Semester 4</option>
+            <option value="5">Semester 5</option>
+            <option value="6">Semester 6</option>
+            <option value="7">Semester 7</option>
+            <option value="8">Semester 8</option>
+            <option value="5">Semester 9</option>
+            <option value="6">Semester 10</option>
+            <option value="7">Semester 11</option>
+            <option value="8">Semester 12</option>
+          </select>
+          <input id="ruang" placeholder="Ruang (ex: B101)" required />
+          <button type="submit" class="btn">Tambah Jadwal</button>
+        </form>
+          <label for="filter-semester" class="filter-label">Filter:</label>
+          <select id="filter-semester" class="filter-select">
+            <option value="all">Semua Semester</option>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4">Semester 4</option>
+            <option value="5">Semester 5</option>
+            <option value="6">Semester 6</option>
+            <option value="7">Semester 7</option>
+            <option value="8">Semester 8</option>
+            <option value="5">Semester 9</option>
+            <option value="6">Semester 10</option>
+            <option value="7">Semester 11</option>
+            <option value="8">Semester 12</option>
+          </select>
+          <button id="clear-all" class="btn outline">Hapus Semua</button>
+        </div>
+
+        <table class="schedule-table" id="schedule-table">
+          <thead>
+            <tr><th>Tanggal</th><th>Hari</th><th>Jam</th><th>Mata Kuliah</th><th>Semester</th><th>Ruang</th><th></th></tr>
+          </thead>
+          <tbody>
+            <!-- rows injected by JS -->
+          </tbody>
+        </table>
+      </section>
+      <div class="actions" style="margin-top:12px; display:flex; gap:8px; align-items:center;">
+        <a href="informasi.html" class="btn outline back-btn" onclick="event.preventDefault(); if(history.length>1){ history.back(); } else { location.href='informasi.html'; }">← Kembali</a>
+      </div>
+      <!-- floating print button (bottom-right) styled like back button -->
+      <button id="print-btn" type="button" class="btn outline back-btn" aria-label="Cetak jadwal" style="position:fixed; right:16px; bottom:16px; z-index:1000;">Cetak</button>
+
+    </main>
+
+    <script>
+      (function(){
+    const STORAGE_KEY = 'jadwalEntries';
+        const form = document.getElementById('schedule-form');
+  const hariEl = document.getElementById('hari');
+  const jamEl = document.getElementById('jam');
+  const matkulEl = document.getElementById('matkul');
+  const semesterEl = document.getElementById('semester');
+  const ruangEl = document.getElementById('ruang');
+    const tanggalEl = document.getElementById('tanggal');
+    const bulanEl = document.getElementById('bulan');
+  const filterEl = document.getElementById('filter-semester');
+        const tbody = document.querySelector('#schedule-table tbody');
+        const toggleBtn = document.getElementById('toggle-large');
+        const scheduleArea = document.getElementById('schedule-area');
+        const clearBtn = document.getElementById('clear-all');
+
+        function load(){
+          const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          render(data);
+        }
+
+        function save(data){
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function render(data){
+          const filter = filterEl ? filterEl.value : 'all';
+          tbody.innerHTML = '';
+          data.forEach((row, idx) => {
+            // treat missing semester as empty and only show if filter is 'all'
+            const sem = row.semester ? String(row.semester) : '';
+            if(filter !== 'all' && sem !== filter) return;
+            const tr = document.createElement('tr');
+            // handle older entries without ruang/semester
+            const ruangText = row.ruang ? escapeHtml(row.ruang) : '';
+            // show full semester text instead of abbreviated form
+            const semText = sem ? ('Semester ' + escapeHtml(sem)) : 'Tanpa Semester';
+            const tanggalText = row.tanggal ? escapeHtml(row.tanggal) : '-';
+            const bulanNames = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            const bulanText = row.bulan ? (bulanNames[Number(row.bulan)] || row.bulan) : '-';
+            tr.innerHTML = `<td>${tanggalText}</td><td>${escapeHtml(row.hari)}</td><td>${escapeHtml(row.jam)}</td><td>${escapeHtml(row.matkul)}</td><td>${semText}</td><td>${ruangText}</td>`;
+            const del = document.createElement('button'); del.textContent='Hapus'; del.className='btn small';
+            del.addEventListener('click', ()=>{ remove(idx); });
+            const td = document.createElement('td'); td.appendChild(del); td.style.width='1%'; tr.appendChild(td);
+            tbody.appendChild(tr);
+          });
+        }
+
+        function add(entry){
+          const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          data.unshift(entry);
+          save(data);
+          render(data);
+        }
+
+        function remove(index){
+          const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          data.splice(index,1);
+          save(data);
+          render(data);
+        }
+
+        function clearAll(){
+          if(!confirm('Hapus semua jadwal?')) return;
+          localStorage.removeItem(STORAGE_KEY);
+          render([]);
+        }
+
+        // large-view feature removed
+        clearBtn.addEventListener('click', clearAll);
+
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          const h = hariEl.value.trim();
+          const j = jamEl.value.trim();
+          const m = matkulEl.value.trim();
+          const s = semesterEl.value.trim();
+          const r = ruangEl.value.trim();
+          const t = tanggalEl ? (tanggalEl.value || '') : '';
+          const b = bulanEl ? (bulanEl.value || '') : '';
+          // require mata kuliah and jam and ruang; hari remains required
+          if(!h||!j||!m||!s||!r) return;
+          add({hari:h, jam:j, matkul:m, semester:s, ruang:r, tanggal:t, bulan:b});
+          jamEl.value=''; matkulEl.value=''; semesterEl.value='1'; ruangEl.value=''; if(tanggalEl) tanggalEl.value=''; if(bulanEl) bulanEl.value='';
+        });
+
+        if(filterEl){
+          filterEl.addEventListener('change', ()=>{
+            const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            render(data);
+          });
+        }
+
+        function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c]; }); }
+
+        // initialize
+        load();
+
+        // print button handler (open print dialog)
+        const printBtn = document.getElementById('print-btn');
+        if(printBtn){
+          printBtn.addEventListener('click', function(){ window.print(); });
+        }
+      })();
+    </script>
+  </body>
+</html>
