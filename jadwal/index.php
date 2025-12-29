@@ -1,28 +1,45 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['login'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
+
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Jadwal Perkuliahan Mahasiswa</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <header>
-            <div class="logo">
-                <img src="image/polteki.png" alt="Polteki Logo" width="60" height="60">
-            </div>
-            <nav class="navigation">
-                <a href="index.php">Home</a>
-                <a href="biodata.html">Biodata</a>
-                <a href="informasi.html">Informasi</a>
-                <a class="btnLogin-popup" href="login.php">Logout</a>
-            </nav>
-        </header>
-        <main>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Perkuliahan Mahasiswa</title>
+    <link rel="stylesheet" href="stylee.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img src="image/polteki.png" alt="Logo">
+            <span>Politeknik Negeri Batam</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="biodata.php">Biodata</a></li>
+                <li><a href="informasi.php">Informasi</a></li>
+                <li><a href="logout.php" class="logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+        <main class="main-center">
+
             <div class="table-responsive" style="margin-top:30px; text-align:center;">
-                <h2 style="font-size:1.5rem; letter-spacing:1px; margin-bottom:20px;">Kalender Akademik</h2>
-                <!-- Judul tambahan di atas tabel kalender -->
-                <h2 style="margin-top:18px; margin-bottom:8px; text-align:center;">JADWAL PERKULIAHAN MAHASISWA</h2>
+                <h2 class="title-main">JADWAL PERKULIAHAN MAHASISWA</h2>
+                <p class="subtitle">Kalender Akademik</p>
+
 
                 <div class="calendar">
                     <div class="calendar-header">
@@ -36,98 +53,138 @@
         </main>
 
         <script>
-            (function(){
-                const grid = document.getElementById('calendar-grid');
-                const monthYear = document.getElementById('month-year');
-                const prev = document.getElementById('prev-month');
-                const next = document.getElementById('next-month');
-                let cur = new Date();
+    (function() {
+        const grid = document.getElementById('calendar-grid');
+        const monthYear = document.getElementById('month-year');
+        const prev = document.getElementById('prev-month');
+        const next = document.getElementById('next-month');
 
-                function render(d){
-                    grid.innerHTML = '';
-                    const year = d.getFullYear();
-                    const month = d.getMonth();
-                    monthYear.textContent = d.toLocaleString(undefined,{month:'long', year:'numeric'});
+        // Tambahkan referensi modal (Pastikan ID ini ada di HTML Anda)
+        const modal = document.getElementById('modal-detail');
+        const modalBody = document.getElementById('modal-body');
 
-                    const first = new Date(year,month,1);
-                    const last = new Date(year, month+1, 0).getDate();
-                    const startDay = first.getDay();
+        let cur = new Date();
+        let jadwalData = [];
 
-                    // weekday headers
-                    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(w => {
-                        const hd = document.createElement('div'); hd.className='cal-cell head'; hd.textContent = w; grid.appendChild(hd);
-                    });
+        /* ================= 1. AMBIL DATA DARI DATABASE ================= */
+        function loadJadwal() {
+            fetch('jadwal_api.php?aksi=ambil')
+                .then(r => r.json())
+                .then(data => {
+                    jadwalData = data;
+                    render(cur);
+                })
+                .catch(err => console.error('Gagal ambil jadwal:', err));
+        }
 
-                    for(let i=0;i<startDay;i++){ const empty = document.createElement('div'); empty.className='cal-cell empty'; grid.appendChild(empty); }
+        /* ================= 2. RENDER KALENDER & PENANDA ================= */
+        function render(d) {
+            grid.innerHTML = '';
+            const year = d.getFullYear();
+            const month = d.getMonth();
 
-                    for(let day=1; day<=last; day++){
-                            const cell = document.createElement('div');
-                            cell.className='cal-cell day';
-                            cell.textContent = day;
-                            // store ISO date on the cell for easy matching (YYYY-MM-DD)
-                            const iso = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-                            cell.dataset.date = iso;
-                            grid.appendChild(cell);
-                        }
+            monthYear.textContent = d.toLocaleString('id-ID', {
+                month: 'long',
+                year: 'numeric'
+            });
 
-                        // after building grid, add markers from stored jadwalEntries
-                        addCalendarMarkers(year, month);
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+
+            // Header hari
+            ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].forEach(h => {
+                const hd = document.createElement('div');
+                hd.className = 'cal-cell head';
+                hd.textContent = h;
+                grid.appendChild(hd);
+            });
+
+            // Sel kosong
+            for (let i = 0; i < firstDay; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'cal-cell empty';
+                grid.appendChild(empty);
+            }
+
+            // Tanggal
+            for (let day = 1; day <= lastDate; day++) {
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell day';
+                cell.textContent = day;
+
+                const isoDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                cell.dataset.date = isoDate;
+
+                // FILTER JADWAL BERDASARKAN TANGGAL INI
+                const jadwalHariIni = jadwalData.filter(j => j.tanggal === isoDate);
+
+                if (jadwalHariIni.length > 0) {
+                    // Tambahkan titik penanda
+                    const dot = document.createElement('span');
+                    dot.className = 'marker';
+                    cell.appendChild(dot);
+
+                    // BIAR BISA DIKLIK
+                    cell.style.cursor = 'pointer';
+                    cell.onclick = () => {
+                        showPopUp(isoDate, jadwalHariIni);
+                    };
                 }
 
-                    function addCalendarMarkers(year, month){
-                        // remove existing markers
-                        document.querySelectorAll('.cal-cell.day .marker').forEach(m => m.remove());
-                        let entries = [];
-                        try{ entries = JSON.parse(localStorage.getItem('jadwalEntries') || '[]'); }catch(e){ entries = []; }
-                        if(!entries.length) return;
+                grid.appendChild(cell);
+            }
+        }
 
-                        // helper to get weekday index from nama hari
-                        const hariMap = { 'Minggu':0,'Senin':1,'Selasa':2,'Rabu':3,'Kamis':4,'Jumat':5,'Sabtu':6,
-                                          'Sunday':0,'Monday':1,'Tuesday':2,'Wednesday':3,'Thursday':4,'Friday':5,'Saturday':6 };
+        /* ================= 3. FUNGSI POP-UP DETAIL ================= */
+        function showPopUp(tanggal, list) {
+            // Jika Anda belum membuat Modal HTML, alert sederhana bisa digunakan dulu:
+            let info = `Jadwal Tanggal: ${tanggal}\n\n`;
+            list.forEach((j, i) => {
+                info += `${i+1}. ${j.mata_kuliah}\n   Jam: ${j.jam}\n   Ruang: ${j.ruang}\n\n`;
+            });
+            
+            // Tampilkan Detail
+            alert(info); 
+            
+            // Jika Anda sudah punya elemen modal-detail, gunakan ini:
+            /*
+            modalBody.innerHTML = list.map(j => `
+                <div class="jadwal-item">
+                    <strong>${j.mata_kuliah}</strong><br>
+                    Jam: ${j.jam} | Ruang: ${j.ruang}
+                </div>
+            `).join('<hr>');
+            modal.style.display = 'flex';
+            */
+        }
 
-                        entries.forEach(en => {
-                            if(en.tanggal){
-                                // en.tanggal should be in YYYY-MM-DD format
-                                const cell = document.querySelector(`.cal-cell.day[data-date="${en.tanggal}"]`);
-                                if(cell) appendMarker(cell);
-                            } else if(en.hari){
-                                // mark all days in the current month matching the weekday
-                                const target = hariMap[en.hari] ?? hariMap[en.hari.charAt(0).toUpperCase()+en.hari.slice(1)];
-                                if(target === undefined) return;
-                                // iterate day cells
-                                document.querySelectorAll('.cal-cell.day').forEach(cell => {
-                                    const parts = cell.dataset.date.split('-');
-                                    const d = new Date(Number(parts[0]), Number(parts[1])-1, Number(parts[2]));
-                                    if(d.getFullYear()===year && d.getMonth()===month && d.getDay()===target){
-                                        appendMarker(cell);
-                                    }
-                                });
-                            }
-                        });
-                    }
+        /* ================= 4. NAVIGASI & INIT ================= */
+        prev.addEventListener('click', () => {
+            cur = new Date(cur.getFullYear(), cur.getMonth() - 1, 1);
+            render(cur);
+        });
 
-                    function appendMarker(cell){
-                        // avoid duplicate markers
-                        if(cell.querySelector('.marker')) return;
-                        const m = document.createElement('span');
-                        m.className = 'marker';
-                        m.title = 'Ada jadwal';
-                        cell.appendChild(m);
-                    }
+        next.addEventListener('click', () => {
+            cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1);
+            render(cur);
+        });
 
-                prev.addEventListener('click', ()=>{ cur = new Date(cur.getFullYear(), cur.getMonth()-1,1); render(cur); });
-                next.addEventListener('click', ()=>{ cur = new Date(cur.getFullYear(), cur.getMonth()+1,1); render(cur); });
+        loadJadwal();
+    })();
+</script>
 
-                render(cur);
+        
+    <div id="modal-detail" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Detail Jadwal</h3>
+            <span class="close-modal" id="close-modal">&times;</span>
+        </div>
+        <div id="modal-body">
+            </div>
+    </div>
+</div>
 
-                // update markers when storage changes (e.g., schedule added on another tab)
-                window.addEventListener('storage', (ev)=>{
-                    if(ev.key === 'jadwalEntries') render(cur);
-                });
+</body>
 
-                // also refresh when the page regains focus
-                window.addEventListener('focus', ()=>{ render(cur); });
-            })();
-        </script>
-    </body>
 </html>

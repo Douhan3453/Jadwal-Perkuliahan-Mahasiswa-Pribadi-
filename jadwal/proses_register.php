@@ -8,7 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
     $phone    = $_POST['phone'];
 
-    $query = mysqli_query($koneksi,
+    $query = mysqli_query(
+        $koneksi,
         "INSERT INTO users (username,email,password,phone)
          VALUES ('$username','$email','$password','$phone')"
     );
@@ -22,4 +23,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         window.location='login.php';
     </script>";
 }
-?>
