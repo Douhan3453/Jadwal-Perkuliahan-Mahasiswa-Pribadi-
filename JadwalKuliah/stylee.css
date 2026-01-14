@@ -1,0 +1,1308 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ================= ROOT & RESET ================= */
+:root {
+    --bg-overlay: rgba(0, 0, 0, 0.65);
+    --panel-bg: rgba(0, 0, 0, 0.55);
+    --panel-border: rgba(255, 255, 255, 0.12);
+    --accent: #00ffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(var(--bg-overlay), var(--bg-overlay)),
+        url('image/POLTEK.jpg') no-repeat center / cover;
+    color: #fff;
+}
+
+/* ================= HEADER / NAVBAR ================= */
+.top-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(18px);
+    background: rgba(0, 0, 0, 0.45);
+    border-bottom: 1px solid var(--panel-border);
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+}
+
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.navigation a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    position: relative;
+}
+
+.navigation a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    transform: scaleX(0);
+    transition: .3s;
+}
+
+.navigation a:hover::after {
+    transform: scaleX(1);
+}
+
+/* ================= BUTTON ================= */
+.btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: 2px solid #fff;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.btn:hover {
+    background: #fff;
+    color: #162938;
+}
+
+.btn.danger {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn.danger:hover {
+    opacity: .9;
+}
+
+/* ================= MAIN CENTER ================= */
+.main-center {
+    min-height: 100vh;
+    padding-top: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ================= PANEL / CONTAINER ================= */
+.table-responsive {
+    max-width: 850px;
+    padding: 35px;
+    border-radius: 18px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .5);
+}
+
+/* ================= CALENDAR ================= */
+.calendar {
+    max-width: 820px;
+    margin: auto;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.cal-cell {
+    padding: 14px;
+    min-height: 80px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    position: relative;
+    transition: .2s;
+}
+
+.cal-cell.head {
+    background: transparent;
+    font-weight: 700;
+    text-align: center;
+    opacity: .8;
+}
+
+.cal-cell.day {
+    cursor: pointer;
+}
+
+.cal-cell.day:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-3px);
+}
+
+/* Event marker */
+.marker {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px var(--accent);
+}
+
+/* ================= TABLE ================= */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.schedule-table th,
+.schedule-table td {
+    padding: 14px;
+    border-bottom: 1px solid var(--panel-border);
+}
+
+.schedule-table th {
+    text-align: left;
+    font-weight: 600;
+}
+
+/* ================= CARD / BIODATA ================= */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: var(--panel-bg);
+    padding: 22px;
+    border-radius: 14px;
+    text-align: center;
+    border: 1px solid var(--panel-border);
+}
+
+.card img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+    .top-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .calendar-grid {
+        gap: 6px;
+    }
+
+    .table-responsive {
+        padding: 20px;
+    }
+}
+
+/* ================= BIODATA PAGE ================= */
+.biodata-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+.biodata-title {
+    text-align: left;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    line-height: 1.4;
+    color: #fff;
+}
+
+/* GRID */
+.biodata-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* CARD */
+.biodata-card {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(18px);
+    border-radius: 18px;
+    padding: 28px 20px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.55);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.biodata-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+}
+
+/* AVATAR */
+.biodata-card .avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 14px;
+    border: 3px solid rgba(255, 255, 255, 0.25);
+}
+
+/* TEXT */
+.biodata-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.biodata-card p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-bottom: 6px;
+}
+
+.biodata-card span {
+    font-size: 0.85rem;
+    opacity: 0.75;
+    word-break: break-word;
+}
+
+/* HIGHLIGHT (PEMBUAT UTAMA) */
+.biodata-card.highlight {
+    border: 2px solid aqua;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .biodata-title {
+        font-size: 1.6rem;
+        text-align: center;
+    }
+}
+
+/* Reset dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Background gelap seperti pada gambar (simulasi background gedung/langit) */
+body {
+    background-color: #001f3f;
+    /* Ganti dengan gambar jika perlu */
+}
+
+.navbar {
+    width: 100%;
+    padding: 15px 0;
+    /* Memberikan efek gradient gelap transparan agar teks terlihat jelas */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Penataan Logo */
+.logo-section {
+    margin-bottom: 15px;
+}
+
+.logo-img {
+    height: 60px;
+    /* Sesuaikan ukuran logo */
+    display: block;
+}
+
+/* Penataan Link */
+.nav-links {
+    display: flex;
+    justify-content: flex-start;
+    /* Sejajar ke kiri */
+    align-items: center;
+    gap: 30px;
+}
+
+.left-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #00aaff;
+    /* Warna biru muda saat hover */
+}
+
+/* Margin khusus untuk memisahkan Logout */
+.right-links {
+    margin-left: 20px;
+}
+
+/* Responsif untuk HP */
+@media (max-width: 600px) {
+    .nav-links {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .right-links {
+        margin-left: 0;
+    }
+}
+
+
+
+/* Reset Dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: url('image/POLTEK.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background: rgba(0, 0, 0, 0.8);
+    /* Hitam pekat transparan */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 40px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-size: 0.9rem;
+}
+
+/* Hero Section & Glassmorphism */
+.hero {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+}
+
+.overlay-glass {
+    background: rgba(255, 255, 255, 0.05);
+    /* Putih sangat tipis */
+    backdrop-filter: blur(15px);
+    /* Efek blur kaca */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 20px;
+    width: 80%;
+    max-width: 900px;
+    height: fit-content;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* Container Kartu */
+.card-container {
+    display: flex;
+    gap: 20px;
+}
+
+.card {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.4);
+    /* Background kartu lebih gelap */
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Warna Teks Ungu (Sesuai Gambar) */
+.card h3,
+.card a {
+    color: #ffffff;
+    /* Warna ungu terang */
+    text-decoration: none;
+}
+
+.card p {
+    font-size: 0.85rem;
+    margin: 10px 0;
+    color: #ccc;
+}
+
+/* Kontainer Utama (Glassmorphism) */
+.glass-container {
+    background: rgba(45, 45, 45, 0.7);
+    /* Lebih gelap seperti di gambar */
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    padding: 30px;
+    color: white;
+    width: 90%;
+    margin: 20px auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Pengaturan Baris Form */
+.form-row,
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Gaya Input & Select */
+input,
+select {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: white;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+/* Tombol Tambah (Hitam/GELAP) */
+.btn-tambah {
+    background: #332d29;
+    color: white;
+    border: 1px solid #fff;
+    padding: 8px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Tombol Hapus (MERAH) */
+.btn-hapus {
+    background: #d9434e;
+    /* Merah sesuai gambar */
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Tabel Jadwal */
+.table-jadwal {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.table-jadwal th {
+    padding: 15px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Container Utama untuk Form Jadwal */
+.jadwal-container {
+    width: 90%;
+    /* Mengambil 90% lebar layar pada perangkat kecil */
+    max-width: 1100px;
+    /* Batas lebar maksimal agar tidak terlalu melar di monitor besar */
+    margin: 50px auto;
+    /* 'auto' akan membuat elemen berada di tengah secara horizontal */
+    background: rgba(0, 0, 0, 0.6);
+    /* Efek transparan gelap sesuai gambar */
+    backdrop-filter: blur(10px);
+    /* Efek blur pada background */
+    padding: 30px;
+    border-radius: 20px;
+    color: white;
+}
+
+/* Mengatur agar inputan di dalamnya rapi */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    /* Agar responsif jika layar mengecil */
+    gap: 15px;
+    /* Jarak antar input */
+    justify-content: center;
+    /* Mengetengahkan isi input di dalam container */
+    align-items: flex-end;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Mempercantik inputan agar seragam */
+input,
+select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Pastikan body menutupi seluruh layar agar konten bisa ke tengah */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: url('image/poltek.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Mengatur Kontainer Utama agar ke Tengah */
+.container {
+    flex: 1;
+    /* Mengambil sisa ruang setelah navbar */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* Mengatur jarak dari atas */
+    align-items: center;
+    /* Menaruh konten di tengah secara horizontal */
+    padding-top: 50px;
+    /* Jarak dari navbar */
+}
+
+/* Judul Jadwal */
+.container h2 {
+    color: white;
+    width: 85%;
+    /* Lebar judul mengikuti box di bawahnya */
+    max-width: 1200px;
+    margin-bottom: 15px;
+    font-size: 2rem;
+    /* Ukuran font judul lebih besar */
+}
+
+/* Membuat Box Jadwal Lebih Besar dan Glassmorphism */
+.table-responsive {
+    background: rgba(0, 0, 0, 0.6);
+    /* Transparansi gelap */
+    backdrop-filter: blur(15px);
+    /* Efek blur kaca */
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 40px;
+    /* Padding lebih luas agar box terlihat besar */
+    width: 85%;
+    /* Lebar box ditingkatkan */
+    max-width: 1200px;
+    /* Batas maksimal lebar */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Mengatur Tata Letak Form agar Rapi di dalam Box */
+.schedule-form {
+    display: flex;
+    flex-wrap: wrap;
+    /* Agar input bisa turun jika layar sempit */
+    gap: 20px;
+    /* Jarak antar elemen input */
+    align-items: flex-end;
+    /* Label dan input sejajar di bawah */
+    margin-bottom: 30px;
+}
+
+.schedule-form label {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+/* Memperbesar ukuran input dan select */
+.schedule-form input,
+.schedule-form select,
+.filter-actions select {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    min-width: 150px;
+}
+
+/* Mempercantik Tombol Tambah */
+.btn {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    padding: 10px 25px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    height: fit-content;
+}
+
+.btn:hover {
+    background: white;
+    color: black;
+}
+
+/* Baris Filter dan Tombol Hapus */
+.filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn.danger {
+    background: #e63946;
+    border: none;
+}
+
+.btn.danger:hover {
+    background: #b91c1c;
+    color: white;
+}
+
+/* Pengaturan Tabel agar memenuhi Box */
+.schedule-table {
+    width: 100%;
+    color: white;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.schedule-table th {
+    text-align: left;
+    padding: 15px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1.1rem;
+}
+
+.schedule-table td {
+    padding: 15px 10px;
+}
+
+/* Container Utama dibuat lebih lebar */
+.table-responsive {
+    background: rgba(0, 0, 0, 0.7);
+    /* Lebih gelap agar teks putih kontras */
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 40px;
+    width: 95%;
+    /* Menggunakan 95% lebar layar */
+    max-width: 1400px;
+    /* Batas maksimal yang sangat lebar */
+    margin: 20px auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Merapikan Form Input agar sejajar sempurna */
+.schedule-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.schedule-form label {
+    flex: 1;
+    /* Memberikan ruang yang sama antar input */
+    min-width: 150px;
+}
+
+/* Style Tabel agar lebih rapi */
+.schedule-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    /* Memberi jarak antar baris */
+}
+
+.schedule-table th {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: #bbb;
+    padding: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.schedule-table td {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Tombol Hapus Kecil di Tabel */
+.btn-delete-row {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.btn-delete-row:hover {
+    background: #ff6b81;
+}
+
+/* Container Utama */
+.table-responsive {
+    background: rgba(0, 0, 0, 0.7);
+    /* Transparansi gelap */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 40px;
+    width: 95%;
+    max-width: 1300px;
+    margin: 30px auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    color: #fff;
+    margin-bottom: 25px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Area Input Catatan */
+#note-form {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+#note-input {
+    width: 100%;
+    min-height: 100px;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    margin-bottom: 15px;
+    resize: vertical;
+}
+
+/* Controls & Filters */
+.controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.filter-label {
+    color: #bbb;
+    font-size: 0.9rem;
+}
+
+select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background: white;
+    cursor: pointer;
+}
+
+/* Tabel Catatan */
+.notes-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.notes-table th {
+    color: #fff;
+    padding: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.notes-table td {
+    background: rgba(255, 255, 255, 0.03);
+    color: #eee;
+    padding: 15px;
+    transition: 0.3s;
+}
+
+.notes-table tr:hover td {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Tombol */
+.btn {
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+}
+
+.btn:not(.outline) {
+    background: #fff;
+    color: #333;
+}
+
+.btn:hover:not(.outline) {
+    background: #2c3e50;
+    color: #fff;
+}
+
+.btn.outline {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+}
+
+.btn.small {
+    padding: 5px 15px;
+    font-size: 0.8rem;
+}
+
+.btn.outline:hover {
+    background: #ff4757;
+    border-color: #ff4757;
+}
+
+.back-btn {
+    margin-top: 20px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+/* Styling Modal */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #fff;
+    color: #333;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.close-modal {
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ff4757;
+}
+
+.jadwal-item {
+    background: #f1f2f6;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 4px solid #2f3542;
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    /* sejajar tengah vertikal */
+    gap: 20px;
+    /* jarak foto & teks */
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-text {
+    color: white;
+}
+
+/* css bidata*/
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.message {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.crud-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.avatar-preview {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.avatar-preview img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007bff;
+}
+
+.current-foto {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.file-info {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Container Utama Kalender */
+.calendar {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Sel Tanggal */
+.cal-cell.day {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: white;
+    font-weight: 500;
+    padding: 10px;
+}
+
+.cal-cell.day:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    border-color: #00d2ff;
+}
+
+/* Marker Penanda (Titik Merah) */
+.marker {
+    width: 6px;
+    height: 6px;
+    background-color: #ff4757;
+    border-radius: 50%;
+    margin: 5px auto 0;
+    box-shadow: 0 0 8px #ff4757;
+}/* Container Utama Kalender */
+.calendar {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Sel Tanggal */
+.cal-cell.day {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: rgb(238, 238, 238);
+    font-weight: 500;
+    padding: 10px;
+}
+
+.cal-cell.day:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    border-color: #00d2ff;
+}
+
+/* Marker Penanda (Titik Merah) */
+.marker {
+    width: 6px;
+    height: 6px;
+    background-color: #ff4757;
+    border-radius: 50%;
+    margin: 5px auto 0;
+    box-shadow: 0 0 8px #ff4757;
+}
+
+.jadwal-item {
+    text-align: left;
+    max-width: 400px;
+    margin: 10px auto;
+}
+
+/* Judul Tanggal */
+.modal-body h4 {
+    color: #00d2ff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    display: inline-block;
+}
+
+/* Kartu Jadwal */
+.jadwal-item {
+    background: rgba(255, 255, 255, 0.9); /* Putih pekat agar teks terbaca */
+    color: #333; /* Teks gelap agar kontras */
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border-left: 6px solid #007bff; /* Garis aksen biru */
+}
+
+.jadwal-item strong {
+    font-size: 1.2rem;
+    color: #222;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.jadwal-item small {
+    font-size: 0.9rem;
+    color: #666;
+    display: block;
+    margin: 2px 0;
+}
+
+/* Efek pemisah antar jadwal */
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0));
+    margin: 20px 0;
+}
+

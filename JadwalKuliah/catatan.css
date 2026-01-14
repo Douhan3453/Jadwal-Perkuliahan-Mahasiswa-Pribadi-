@@ -1,0 +1,177 @@
+  .notification {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      z-index: 1000;
+      animation: slideIn 0.3s ease-out;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      max-width: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .notification.success {
+      background-color: #4CAF50;
+      border-left: 5px solid #388E3C;
+    }
+    
+    .notification.error {
+      background-color: #f44336;
+      border-left: 5px solid #d32f2f;
+    }
+    
+    .notification.info {
+      background-color: #2196F3;
+      border-left: 5px solid #1976D2;
+    }
+    
+    .notification-content {
+      flex-grow: 1;
+    }
+    
+    .notification-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      margin-left: 15px;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+    
+    .notification-close:hover {
+      background-color: rgba(255,255,255,0.2);
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes slideOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+    
+    .notification.hidden {
+      animation: slideOut 0.3s ease-out forwards;
+    }
+    
+    /* Loading state */
+    .loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    
+    /* Button styles */
+    .btn-action {
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+      font-weight: 500;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+    }
+    
+    .btn-action:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+      transform: translateY(-2px);
+    }
+    
+    .btn-action:focus {
+      outline: none;
+      border-color: #f44336;
+      box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.3);
+    }
+    
+    .btn-danger {
+      background-color: rgba(244, 67, 54, 0.1);
+      border-color: #f44336;
+    }
+    
+    .btn-danger:hover {
+      background-color: rgba(244, 67, 54, 0.3);
+    }
+    
+    /* Form styling */
+    #note-input {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background-color: #2a2a2a;
+      color: #fff;
+      font-size: 14px;
+      resize: vertical;
+      margin-bottom: 15px;
+    }
+    
+    #note-input:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    }
+    
+    .form-select {
+      padding: 8px 12px;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #2a2a2a;
+      color: #fff;
+      min-width: 150px;
+    }
+    
+    /* Tag styling */
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .tag.pribadi {
+      background-color: rgba(76, 175, 80, 0.15);
+      color: #4CAF50;
+      border: 1px solid #4CAF50;
+    }
+    
+    .tag.perkuliahan {
+      background-color: rgba(33, 150, 243, 0.15);
+      color: #2196F3;
+      border: 1px solid #2196F3;
+    }
+    
+    .tag.lainnya {
+      background-color: rgba(255, 193, 7, 0.15);
+      color: #FFC107;
+      border: 1px solid #FFC107;
+    }

@@ -1,0 +1,120 @@
+/* ================= RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+/* ================= BACKGROUND ================= */
+body {
+   height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('image/poltek.jpeg') no-repeat center center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+
+/* ================= CONTAINER ================= */
+.auth-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+/* ================= CARD ================= */
+.auth-box {
+    background: #ffffff;
+    padding: 35px 30px;
+    border-radius: 14px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    text-align: center;
+}
+
+/* ================= TITLE ================= */
+.auth-box h2 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #2c5364;
+    font-weight: 700;
+}
+
+/* ================= INPUT ================= */
+.input-group {
+    margin-bottom: 18px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #2c5364;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(44,83,100,0.2);
+}
+
+/* ================= BUTTON ================= */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: linear-gradient(135deg, #2c5364, #0f2027);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* ================= TEXT & LINK ================= */
+.auth-box p {
+    margin-top: 18px;
+    font-size: 14px;
+    color: #555;
+}
+
+.auth-box a {
+    color: #2c5364;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-box a:hover {
+    text-decoration: underline;
+}
+
+/* ================= ERROR MESSAGE ================= */
+.auth-box p[style*="color:red"] {
+    background: #ffe5e5;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 480px) {
+    .auth-box {
+        padding: 30px 20px;
+    }
+
+    .auth-box h2 {
+        font-size: 24px;
+    }
+}

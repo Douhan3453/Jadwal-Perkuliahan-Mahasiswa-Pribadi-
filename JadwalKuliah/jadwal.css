@@ -1,0 +1,151 @@
+/* ================= NOTIFICATION ================= */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 300px;
+    max-width: 400px;
+    animation: slideIn 0.3s ease-out;
+    transform: translateX(0);
+}
+
+.notification.hidden {
+    animation: slideOut 0.3s ease-out;
+    transform: translateX(120%);
+}
+
+.notification.error {
+    background-color: #f44336;
+}
+
+.notification.info {
+    background-color: #2196F3;
+}
+
+.notification-content {
+    flex-grow: 1;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 15px;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.notification-close:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+/* ================= ANIMATION ================= */
+@keyframes slideIn {
+    from { transform: translateX(120%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); }
+    to { transform: translateX(120%); }
+}
+
+/* ================= BUTTON ================= */
+.btn-small {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btn-loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-loading:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* ================= TABLE ================= */
+.actions-cell {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+/* ================= CALENDAR (AMAN) ================= */
+.calendar-header {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.cal-cell {
+    border: 1px solid #ccc;
+    min-height: 70px;
+    padding: 5px;
+    text-align: center;
+}
+
+.cal-cell a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #000;
+    z-index: 10;
+    position: relative;
+}
+
+.marker {
+    width: 6px;
+    height: 6px;
+    background: red;
+    border-radius: 50%;
+    margin: 4px auto 0;
+}
+
+.jadwal-item {
+    text-align: left;
+    max-width: 400px;
+    margin: 10px auto;
+}
